@@ -1,0 +1,30 @@
+name: GitHub Shared Workflow
+run-name: Test Shared Workflow 🚀
+on:
+  workflow_dispatch:
+    branches: [main]
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+      - name: List files in the repository
+        run: |
+          ls ${{ github.workspace }}
+      - run: echo "🍏 This job's status is ${{ job.status }}."
+
+  call-workflow-passing-data:
+    permissions:
+      contents: read
+      pull-requests: write
+    uses: chrissav/github-workflows/.github/workflows/called-workflow.yml@main
+    with:
+      config-path: .github/labeler.yml
+    secrets:
+      token: ${{ secrets.GITHUB_TOKEN }}
